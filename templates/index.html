@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App with Dots</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+        }
+        .dots-container {
+            text-align: center;
+        }
+        .dot {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="dots-container">
+        {% for dot in dots %}
+            <div class="dot" style="background-color: {{ dot.color }};" onclick="recordClick({{ dot.id }})"></div>
+        {% endfor %}
+    </div>
+    <script>
+        function recordClick(dot_id) {
+            fetch('/record_click', {
+                method: 'POST',
+                body: new URLSearchParams({'dot_id': dot_id}),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+            var dot = document.querySelector('.dot:nth-child(' + dot_id + ')');
+        }
+    </script>
+</body>
+</html>
